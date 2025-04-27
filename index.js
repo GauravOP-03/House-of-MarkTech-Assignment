@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 
@@ -11,6 +12,8 @@ function generateToken() {
 }
 // console.log(generateToken());
 
+// middleware to check if the user is authorized
+// if the user is authorized, it will add the username to the request object
 const authorization = (req, res, next) => {
   const token = req.headers["authorization"];
   if (!token || !session[token]) return res.status(401).json("unauthorized");
@@ -18,10 +21,12 @@ const authorization = (req, res, next) => {
   next();
 };
 
+// root route to check if the server is running
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "health good" });
 });
 
+// signup route to create a new user
 app.post("/signup", (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password)
@@ -31,6 +36,7 @@ app.post("/signup", (req, res) => {
   res.status(201).json("user created successfully");
 });
 
+// login route to login the user
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -43,6 +49,8 @@ app.post("/login", (req, res) => {
   res.status(200).json({ message: "Login Successfully", token });
 });
 
+// route to get the user details
+
 app.post("/task", authorization, (req, res) => {
   const { task } = req.body;
   if (!task) return res.status(400).json("task is required");
@@ -50,11 +58,13 @@ app.post("/task", authorization, (req, res) => {
   res.status(201).json("task created successfully");
 });
 
+// route to get the user tasks
 app.get("/task", authorization, (req, res) => {
   const tasks = user[req.username].tasks;
   return res.json(tasks);
 });
 
+// route to update the user tasks
 app.delete("/task", authorization, (req, res) => {
   const { task } = req.body;
   if (!task) return res.status(400).json("task is required");
@@ -64,11 +74,16 @@ app.delete("/task", authorization, (req, res) => {
   res.status(200).json("task deleted successfully");
 });
 
+// logout route to logout the user
+// it will delete the token from the session object
 app.get("/logout", authorization, (req, res) => {
   const token = req.headers["authorization"];
   delete session[token];
   res.status(200).json("logout successfully");
 });
-app.listen(3000, () => {
+
+//port to run the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
   console.log("app is listening on port 3000");
 });
