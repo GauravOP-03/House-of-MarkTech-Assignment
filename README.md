@@ -20,15 +20,17 @@ This is a simple **Task Management API** built using **Node.js** and **Express**
 
 ## Installation
 
-1. Clone the Repository
-
-[git clone https://github.com/GauravOP-03/EmployWise-Assignment.git](https://github.com/GauravOP-03/House-of-MarkTech-Assignment)
-cd House-of-MarkTech-Assignment
-
+### 1. Clone the Repository
+```bash
+- git clone https://github.com/GauravOP-03/House-of-MarkTech-Assignment.git
+- cd House-of-MarkTech-Assignment
+```
 2. Install Dependencies
-
+```bash
 npm install
+```
 
 3. Run the Application
-
+```bash
 node index.js
+```
